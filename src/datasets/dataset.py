@@ -5,7 +5,7 @@ import numpy.random as random
 import torch.nn.functional as F
 from torch_geometric.data import Data
 from torch_geometric.data.lightning import LightningDataset
-from torch_geometric.datasets import Planetoid, SNAPDataset, EmailEUCore
+from torch_geometric.datasets import Planetoid, SNAPDataset, EmailEUCore, WikipediaNetwork
 from torch_geometric.utils import subgraph, to_networkx, to_undirected
 from torch_geometric.nn.models import GraphSAGE
 from torch_geometric.loader import LinkNeighborLoader
@@ -35,6 +35,11 @@ class SampledDataset(LightningDataset):
             self.graph = EmailEUCore(self.path).get(0)
             self.graph.x = torch.zeros(self.graph.num_nodes, 1)
             self.graph.edge_index = to_undirected(self.graph.edge_index)
+        elif cfg.dataset.name == "Wiki":
+            self.path += "/Wiki"
+            self.graph = WikipediaNetwork(self.path, "chameleon").get(0)
+            self.graph.edge_index = to_undirected(self.graph.edge_index)
+            self.path += '/chameleon/geom_gcn'
 
         ##Embeddings phase
         if os.path.isfile(self.path + "/processed/embeddings.pt"):
@@ -73,7 +78,11 @@ class SampledDataset(LightningDataset):
         
         self.graph.to('cpu')
         self.G = to_networkx(self.graph, to_undirected=True)
-
+        import pickle
+        import networkx as nx
+        pickle.dump(self.G, open("../eval/real/Wiki.pickle", "wb"))
+        nx.write_edgelist(self.G, 'Wiki.edges')
+        return
         if n_samples:
             sampled_graphs = [list(set(sampler.sample(self.G, 20))) for i in range(n_samples)]
         else:

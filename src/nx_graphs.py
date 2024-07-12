@@ -12,6 +12,13 @@ FOCAL = ['1000_ts_1000_gs_focal.pickle', '1000_ts_2000_gs_focal.pickle']
 FIFTY = ['1000(50)_ts_1000_gs.pickle', '1000(50)_ts_2000_gs.pickle', '500(50)_ts_1000_gs.pickle', '500(50)_ts_2000_gs.pickle']
 TWENTY = ['1000(20)_ts_1000_gs.pickle', '1000(20)_ts_2000_gs.pickle', '1000(20)_ts_1000_gs_fair.pickle', '1000(20)_ts_2000_gs_fair.pickle']
 
+SIZES_THS = {
+    'CiteSeer' :  [3266, 2516, 2045],
+    'Cora' : [7082, 5581, 4495],
+    'Facebook': [8962, 5636, 3579],
+    'Wiki' : [6960, 5373, 4313]
+} 
+
 def read_graph(file):
     G = pickle.load(open(file, 'rb'))
     return G
@@ -148,7 +155,7 @@ def unite(a,b):
 index = np.argsort(pairs_of_nodes)
 
 for i in index:
-    if num_nodes <= 5000:
+    if num_nodes <= min(SIZES_THS[sys.argv[1]]):
         break
     x = pairs_x[i]
     y = pairs_y[i]
@@ -158,7 +165,7 @@ for i in index:
         print(num_nodes)
         unite(x,y)
 
-    if num_nodes in [5000,6000,7000,8000,9000,10000]:
+    if num_nodes in SIZES_THS[sys.argv[1]]:
         G  =nx.Graph()
         for id,sample in enumerate(samples):
             embeddings = sample[0]
@@ -173,7 +180,7 @@ for i in index:
 
         pickle.dump(G, open(f'../eval/gen/{sys.argv[1]}_nodes_{num_nodes}.pickle', 'wb'))
 
-    
+exit()
 #Reportar as duas formas de criar grafos.
 samples = pickle.load(open(f'../eval/gen/sample_{sys.argv[1]}.pickle', 'rb'))
 
