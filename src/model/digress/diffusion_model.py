@@ -290,7 +290,13 @@ class LiftedDenoisingDiffusion(pl.LightningModule):
             samples_left_to_generate -= to_generate
             chains_left_to_save -= chains_save
         print("Saving Graphs")
-        pickle.dump(samples, open(f'sample_{self.cfg.dataset.name}.pickle', 'wb'))
+        filename = f'../eval/gen/sample_{self.cfg.dataset.name}.pickle'
+        for i in range(2, 50):
+            if os.path.exists(filename):
+                filename = f'../eval/gen/sample_{self.cfg.dataset.name}{i}.pickle'
+            else:
+                break
+        pickle.dump(samples, open(filename, 'wb'))
 
 
         # self.sampling_metrics.reset()

@@ -78,11 +78,7 @@ class SampledDataset(LightningDataset):
         
         self.graph.to('cpu')
         self.G = to_networkx(self.graph, to_undirected=True)
-        import pickle
-        import networkx as nx
-        pickle.dump(self.G, open("../eval/real/Wiki.pickle", "wb"))
-        nx.write_edgelist(self.G, 'Wiki.edges')
-        return
+        
         if n_samples:
             sampled_graphs = [list(set(sampler.sample(self.G, 20))) for i in range(n_samples)]
         else:
