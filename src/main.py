@@ -38,7 +38,6 @@ def main(cfg: DictConfig):
     }
     
     model = LiftedDenoisingDiffusion(cfg, **model_kwargs)
-    return
     callbacks = []
 
     if cfg.train.ema_decay > 0:
