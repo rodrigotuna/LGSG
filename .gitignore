@@ -4,3 +4,6 @@ checkpoints
 generated_subgraphs
 outputs
 wandb
+eval
+plots
+results
