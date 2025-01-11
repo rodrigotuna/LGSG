@@ -205,7 +205,7 @@ for i in range(5):
     w = 0.10
     ind = np.arange(4)
     for j in range(metric[i].shape[0]):
-        ax.bar(ind + j * w, metric[i][j],w, label=PRESENT_NAME[MODELS[j]])
+        ax.bar(ind + j * w, metric[i][j],w, label=PRESENT_NAME[MODELS[j+1]])
     
     ax.set_xticks(ind+3*w)
     ax.set_xticklabels(DATASETS)
@@ -235,7 +235,7 @@ for k, dataset in enumerate(DATASETS):
             mat = metric[k][i][j] #size * runs
             lbound = np.mean(mat, axis=1) - np.std(mat, axis=1)
             ubound = np.mean(mat, axis=1) + np.std(mat, axis=1)
-            ax.plot(SIZES[:mat.shape[0]], np.mean(mat, axis=1), label=PRESENT_NAME[MODELS[j]])
+            ax.plot(SIZES[:mat.shape[0]], np.mean(mat, axis=1), label=PRESENT_NAME[MODELS[j+1]])
             ax.fill_between(SIZES[:mat.shape[0]], lbound, ubound, alpha=0.3)
 
     handles, labels = ax.get_legend_handles_labels()
@@ -270,4 +270,4 @@ def draw_graphs():
 
 
 
-draw_graphs()
+#draw_graphs()
